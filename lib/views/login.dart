@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:core';
 
-import 'package:my_app/dashboard.dart';
+import 'news/dashboard.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

@@ -21,11 +21,22 @@ class _DetailPageState extends State<DetailPage> {
                 height: 100,
                 width: 120,
                 margin: EdgeInsets.only(right: 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/09/ifixit-iphone-17-pro-teardown.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+                  ),
+                ),
+              ),
+              Container(
+                height: 100,
+                width: 120,
+                margin: EdgeInsets.only(right: 20),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Colors.transparent,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Icon(Icons.play_circle, color: Colors.white, size: 40),
+                child: Icon(Icons.play_circle, color: Colors.red, size: 40),
               ),
             ],
           ),
@@ -80,17 +91,25 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  headingCar(size) {
+  headingElement(size) {
     return Column(
       children: [
         Stack(
           children: [
-            Container(
-              height: size.height / 3,
+            SizedBox(
+              height: size.height / 3.5,
               width: size.width,
-              decoration: BoxDecoration(color: Colors.green),
+              child: Image.network(
+                "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/09/ifixit-iphone-17-pro-teardown.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              height: size.height / 3.5,
+              width: size.width,
+              decoration: BoxDecoration(color: Colors.transparent),
               child: Center(
-                child: Icon(Icons.play_circle, color: Colors.white, size: 50),
+                child: Icon(Icons.play_circle, color: Colors.red, size: 50),
               ),
             ),
             Positioned(
@@ -100,7 +119,7 @@ class _DetailPageState extends State<DetailPage> {
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Icon(Icons.arrow_back, color: Colors.white, size: 32),
+                child: Icon(Icons.arrow_back, color: Colors.red, size: 32),
               ),
             ),
           ],
@@ -178,13 +197,13 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: size.height,
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height: 45),
-              headingCar(size),
+              headingElement(size),
               verticalCard(
                 size,
                 "Today is holiday Today is sunday Today is sunday",

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/detailPage.dart';
+import 'package:my_app/views/news/detailPage.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -17,10 +17,32 @@ class _DashboardState extends State<Dashboard> {
           width: size.width / 1.5,
           margin: EdgeInsets.only(left: 10),
           decoration: BoxDecoration(
-            color: Colors.green,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(15),
           ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.network(
+              "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/09/ifixit-iphone-17-pro-teardown.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+              fit: BoxFit.fill,
+              opacity: const AlwaysStoppedAnimation(.7),
+            ),
+          ),
         ),
+        Container(
+          height: size.height / 5,
+          width: size.width / 1.5,
+          margin: EdgeInsets.only(left: 10),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.center,
+              colors: [Colors.black, Colors.transparent],
+            ),
+          ),
+        ),
+
         Positioned(
           bottom: 15,
           left: 15,
@@ -30,14 +52,21 @@ class _DashboardState extends State<Dashboard> {
                 heading,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black,
+                      blurRadius: 5,
+                      offset: Offset(0.0, 0.0),
+                    ),
+                  ],
                 ),
               ),
               Text(
                 date,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.white60,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
@@ -67,11 +96,22 @@ class _DashboardState extends State<Dashboard> {
                 height: 100,
                 width: 120,
                 margin: EdgeInsets.only(right: 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/09/ifixit-iphone-17-pro-teardown.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+                  ),
+                ),
+              ),
+              Container(
+                height: 100,
+                width: 120,
+                margin: EdgeInsets.only(right: 20),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Colors.transparent,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Icon(Icons.play_circle, color: Colors.white, size: 40),
+                child: Icon(Icons.play_circle, color: Colors.red, size: 40),
               ),
             ],
           ),
