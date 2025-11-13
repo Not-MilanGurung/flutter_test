@@ -50,12 +50,12 @@ class Articles {
 
   Articles.fromJson(Map<String, dynamic> json) {
     source = json['source'] != null ? Source.fromJson(json['source']) : null;
-    author = json['author'];
+    author = json['author'] ?? "";
     title = json['title'];
     description = json['description'];
     url = json['url'];
-    urlToImage = json['urlToImage'];
-    publishedAt = json['publishedAt'];
+    urlToImage = json['urlToImage'] ?? "";
+    publishedAt = json['publishedAt'] ?? "";
     content = json['content'];
   }
 

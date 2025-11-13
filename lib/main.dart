@@ -1,7 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'views/login.dart';
+import 'package:my_app/firebase_options.dart';
+import 'package:my_app/views/webview.dart';
+// import 'package:my_app/views/esewa/esewapage.dart';
+// import 'package:my_app/views/maps/OSMMap.dart';
+// import 'package:my_app/views/maps/mapspage.dart';
+// import 'package:my_app/views/news/dashboard.dart';
+// import 'package:my_app/views/chatapp/conversations.dart';
+// import 'views/login.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -31,7 +43,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Login(),
+      home: Webview(),
     );
   }
 }

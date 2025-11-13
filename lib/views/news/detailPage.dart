@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/core/newsapicall.dart';
+import 'package:my_app/core/static.dart';
+import 'package:my_app/model/newsapi.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key});
@@ -8,90 +11,118 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  verticalCard(size, heading, date, buttonText) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                height: 100,
-                width: 120,
-                margin: EdgeInsets.only(right: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/09/ifixit-iphone-17-pro-teardown.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
-                  ),
-                ),
-              ),
-              Container(
-                height: 100,
-                width: 120,
-                margin: EdgeInsets.only(right: 20),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Icon(Icons.play_circle, color: Colors.red, size: 40),
-              ),
-            ],
-          ),
+  Future<NewsApi?>? _futureNewsApi;
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: size.width / 2,
-                child: Text(
-                  heading,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                width: size.width / 2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      padding: EdgeInsets.only(
-                        left: 15,
-                        right: 15,
-                        top: 10,
-                        bottom: 10,
-                      ),
-                      child: Text(
-                        buttonText,
-                        style: TextStyle(color: Colors.white),
-                      ),
+  getVerticalCards(NewsApi newsApi, size) {
+    return Column(
+      // padding: EdgeInsetsGeometry.only(top: 12, bottom: 12),
+
+      children: [ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: newsApi.articles!.length,
+        itemBuilder: (BuildContext context, int index) {
+          return verticalCard(size, 'More', newsApi.articles![index]);
+        },
+      ),]
+    );
+  }
+
+  verticalCard(size, buttonText, Articles article) {
+    String heading = article.title!;
+    String date = article.publishedAt!;
+    return GestureDetector(
+      onTap: (){
+        StaticValue.clickedArticle = article;
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (context) => const DetailPage()),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: 100,
+                  width: 120,
+                  margin: EdgeInsets.only(right: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      article.urlToImage ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png",
                     ),
-                    Text(date, style: TextStyle(color: Colors.black)),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Container(
+                  height: 100,
+                  width: 120,
+                  margin: EdgeInsets.only(right: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Icon(Icons.play_circle, color: Colors.red, size: 40),
+                ),
+              ],
+            ),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: size.width / 2,
+                  child: Text(
+                    heading,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  width: size.width / 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: EdgeInsets.only(
+                          left: 15,
+                          right: 15,
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        child: Text(
+                          buttonText,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      Text(date, style: TextStyle(color: Colors.black)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   headingElement(size) {
+    Articles article = StaticValue.clickedArticle!;
     return Column(
       children: [
         Stack(
@@ -100,7 +131,7 @@ class _DetailPageState extends State<DetailPage> {
               height: size.height / 3.5,
               width: size.width,
               child: Image.network(
-                "https://i0.wp.com/9to5mac.com/wp-content/uploads/sites/6/2025/09/ifixit-iphone-17-pro-teardown.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+                article.urlToImage ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png",
                 fit: BoxFit.cover,
               ),
             ),
@@ -131,8 +162,7 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               margin: EdgeInsets.all(15),
               child: Text(
-                "This is Dashain at PCPS college and we are leaving for home."
-                        "All the residents of KTM valley are hurrying to go home"
+                article.title!
                     .toUpperCase(),
                 style: TextStyle(
                   color: Colors.black,
@@ -145,15 +175,13 @@ class _DetailPageState extends State<DetailPage> {
               margin: EdgeInsets.all(15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text("Author Name"), Text("25th Sept 2025")],
+                children: [Text(article.author?? "Null"), Text(article.publishedAt ?? "Null")],
               ),
             ),
             Container(
               margin: EdgeInsets.all(15),
               child: Text(
-                "This is Dashain at PCPS college and we are leaving for home."
-                        "All the residents of KTM valley are hurrying to go home"
-                    .toUpperCase(),
+                article.description!,
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -164,25 +192,10 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               margin: EdgeInsets.all(15),
               child: Text(
-                "This is Dashain at PCPS college and we are leaving for home."
-                        "All the residents of KTM valley are hurrying to go home"
-                    .toUpperCase(),
+                article.content!,
                 style: TextStyle(
                   color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(15),
-              child: Text(
-                "This is Dashain at PCPS college and we are leaving for home."
-                        "All the residents of KTM valley are hurrying to go home"
-                    .toUpperCase(),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.normal,
                   fontSize: 16,
                 ),
               ),
@@ -194,6 +207,11 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
+  void initState(){
+    super.initState();
+    _futureNewsApi = NewsApiCall().getnewsdata('Nepal');
+  }
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
@@ -204,29 +222,16 @@ class _DetailPageState extends State<DetailPage> {
             children: [
               SizedBox(height: 45),
               headingElement(size),
-              verticalCard(
-                size,
-                "Today is holiday Today is sunday Today is sunday",
-                "10th sept 2025",
-                "Click here",
-              ),
-              verticalCard(
-                size,
-                "Today is sunday",
-                "10th sept 2025",
-                "Click here",
-              ),
-              verticalCard(
-                size,
-                "Today is monday",
-                "10th sept 2025",
-                "Click here",
-              ),
-              verticalCard(
-                size,
-                "Today is tuesday",
-                "10th sept 2025",
-                "Click here",
+              FutureBuilder<NewsApi?>(
+                  future: _futureNewsApi,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return getVerticalCards(snapshot.data!, size);
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  },
               ),
             ],
           ),

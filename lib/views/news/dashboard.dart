@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/core/newsapicall.dart';
+import 'package:my_app/core/static.dart';
 import 'package:my_app/model/newsapi.dart';
 import 'package:my_app/views/news/detailPage.dart';
 
@@ -21,9 +22,13 @@ class _DashboardState extends State<Dashboard> {
     futureNewsApiVertical = NewsApiCall().getnewsdata('Nepal');
   }
 
-  horizontalCard(size, heading, date, String? imageURL) {
+  horizontalCard(Size size, Articles article) {
+    String heading = article.title ?? "";
+    String date = article.publishedAt ?? "";
+    String imageURL = article.urlToImage ?? "";
     return GestureDetector(
       onTap: () {
+        StaticValue.clickedArticle = article;
         Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (context) => const DetailPage()),
         );
@@ -41,8 +46,7 @@ class _DashboardState extends State<Dashboard> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.network(
-                imageURL ??
-                    "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg",
+                imageURL,
                 fit: BoxFit.fill,
                 errorBuilder:
                     (
@@ -50,14 +54,8 @@ class _DashboardState extends State<Dashboard> {
                       Object exception,
                       StackTrace? stackTrace,
                     ) {
-                      // Appropriate logging or analytics, e.g.
-                      // myAnalytics.recordError(
-                      //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                      //   exception,
-                      //   stackTrace,
-                      // );
                       return Image.network(
-                        "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg",
+                        StaticValue.noImageFoundURL,
                         fit: BoxFit.fill,
                       );
                     },
@@ -124,71 +122,51 @@ class _DashboardState extends State<Dashboard> {
 
   getHorozintalCards(NewsApi newsApi, size) {
     return Container(
-      height: size.height/5,
-        child: ListView.builder(
-          shrinkWrap: true,
+      padding: EdgeInsetsGeometry.only(left: 6, right: 6),
+      height: size.height / 5,
+      child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: newsApi.articles!.length,
         itemBuilder: (BuildContext context, int index) {
-          return horizontalCard(size, newsApi.articles![index].title,
-              newsApi.articles![index].publishedAt,
-              newsApi.articles![index].urlToImage);
-        }));
-    // List<GestureDetector> cards = List<GestureDetector>.empty(growable: true);
-    // int total = newsApi.articles?.length ?? 0;
-    // for (int i = 0; i < total; i++) {
-    //   if (newsApi.articles == null) break;
-    //   cards.add(
-    //     horizontalCard(
-    //       size,
-    //       newsApi.articles![i].title,
-    //       newsApi.articles![i].publishedAt,
-    //       newsApi.articles![i].urlToImage,
-    //     ),
-    //   );
-    // }
-    // return Row(children: cards);
+          return horizontalCard(size, newsApi.articles![index]);
+        },
+      ),
+    );
   }
 
   getVerticalCards(NewsApi newsApi, size) {
     return Container(
-        padding: EdgeInsetsGeometry.only(top: 12, bottom: 12),
-        height: size.height / 1.5,
-        child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: newsApi.articles!.length,
-        itemBuilder: (BuildContext context, int index){
-          return verticalCard(size,
-          newsApi.articles![index].title,
-          newsApi.articles![index].publishedAt,
-          'More',
-          newsApi.articles![index].urlToImage);
-        }));
-    // List<Padding> cards = List<Padding>.empty(growable: true);
-    // int total = newsApi.articles?.length ?? 0;
-    // for (int i = 0; i < total; i++) {
-    //   if (newsApi.articles == null) break;
-    //   cards.add(
-    //     verticalCard(
-    //       size,
-    //       newsApi.articles![i].title ?? '',
-    //       newsApi.articles![i].publishedAt ?? '',
-    //       'More',
-    //       newsApi.articles![i].urlToImage,
-    //     ),
-    //   );
-    // }
-    // return Column(children: cards);
+      padding: EdgeInsetsGeometry.only(top: 12, bottom: 12),
+      height: size.height / 1.5,
+      child: GridView.builder(scrollDirection: Axis.vertical,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        padding: EdgeInsets.zero,
+      itemBuilder: (BuildContext context, int index){
+        return verticalCard(size, 'More', newsApi.articles![index]);
+      },)
+      // child: ListView.builder(
+      //   shrinkWrap: true,
+      //   itemCount: newsApi.articles!.length,
+      //   itemBuilder: (BuildContext context, int index) {
+      //     return verticalCard(size, 'More', newsApi.articles![index]);
+      //   },
+      // ),
+    );
   }
 
-  verticalCard(size, heading, date, buttonText, imageURL) {
+  verticalCard(Size size, buttonText, Articles article) {
+    String heading = article.title!;
+    String date = article.publishedAt!;
+    String imageURL = article.urlToImage!;
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           GestureDetector(
             onTap: () {
+              StaticValue.clickedArticle = article;
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder: (context) => const DetailPage(),
@@ -200,13 +178,12 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Container(
                   height: 100,
-                  width: 120,
+                  width: 160,
                   margin: EdgeInsets.only(right: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
-                      imageURL ??
-                          "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg",
+                      imageURL,
                       fit: BoxFit.fill,
                       errorBuilder:
                           (
@@ -214,14 +191,8 @@ class _DashboardState extends State<Dashboard> {
                             Object exception,
                             StackTrace? stackTrace,
                           ) {
-                            // Appropriate logging or analytics, e.g.
-                            // myAnalytics.recordError(
-                            //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                            //   exception,
-                            //   stackTrace,
-                            // );
                             return Image.network(
-                              "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg",
+                              StaticValue.noImageFoundURL,
                               fit: BoxFit.fill,
                             );
                           },
@@ -256,10 +227,10 @@ class _DashboardState extends State<Dashboard> {
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+                  maxLines: 1,
                 ),
               ),
-              SizedBox(height: 20),
+              // SizedBox(height: 20),
               SizedBox(
                 width: size.width / 1.8,
                 child: Row(
@@ -282,7 +253,7 @@ class _DashboardState extends State<Dashboard> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         date,
@@ -306,41 +277,40 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(),
       body: Column(
-          children: [
-            FutureBuilder<NewsApi?>(
-                future: futureNewsApiHorizontal,
-                builder: (context, snapshot) {
-                  switch(snapshot.connectionState){
-                    case ConnectionState.none:
-                      break;
-                    case ConnectionState.active:
-                      break;
-                    case ConnectionState.waiting:
-                      break;
-                    case ConnectionState.done:
-                      if(snapshot.hasData){
-                        NewsApi? data = snapshot.data;
-                        return getHorozintalCards(data!, size);
-                      }
+        children: [
+          FutureBuilder<NewsApi?>(
+            future: futureNewsApiHorizontal,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  break;
+                case ConnectionState.active:
+                  break;
+                case ConnectionState.waiting:
+                  break;
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    NewsApi? data = snapshot.data;
+                    return getHorozintalCards(data!, size);
                   }
-                  return Center(child: const CircularProgressIndicator());
-                },
-              ),
+              }
+              return Center(child: const CircularProgressIndicator());
+            },
+          ),
 
-            FutureBuilder<NewsApi?>(
-              future: futureNewsApiVertical,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return getVerticalCards(snapshot.data!, size);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),
-          ],
-        ),
-      
+          FutureBuilder<NewsApi?>(
+            future: futureNewsApiVertical,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return getVerticalCards(snapshot.data!, size);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ],
+      ),
     );
   }
 }
