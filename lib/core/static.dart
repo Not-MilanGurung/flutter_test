@@ -1,13 +1,14 @@
 import 'package:cis099_2/model/newsapi.dart';
+import 'package:cis099_2/secrets.dart';
 
 class StaticValue {
-  static final String apiKey = "01e1fd60224d49e2978d26aa4c80770f";
+  static final String apiKey = Secrets.newsApiKey;
   static final String baseURL = "newsapi.org";
   static final String path = "/v2/everything";
   static Articles? clickedArticle;
   static final String noImageFoundURL =
       "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg";
-  static final String mapKey = "AIzaSyB6dg9Y5It-HF0K1fzuROsznUtbwUyZekw";
+  static final String mapKey = Secrets.mapApiKey;
   var rawData = '''
   {
     "status": "ok",
