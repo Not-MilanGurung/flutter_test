@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/views/chatapp/chats.dart';
+import 'package:cis099_2/views/chatapp/chats.dart';
 
 class Conversations extends StatefulWidget {
   const Conversations({super.key});

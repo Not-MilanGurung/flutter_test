@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/core/newsapicall.dart';
-import 'package:my_app/core/static.dart';
-import 'package:my_app/model/newsapi.dart';
-import 'package:my_app/routes.dart';
+import 'package:cis099_2/core/newsapicall.dart';
+import 'package:cis099_2/core/static.dart';
+import 'package:cis099_2/model/newsapi.dart';
+import 'package:cis099_2/routes.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key});

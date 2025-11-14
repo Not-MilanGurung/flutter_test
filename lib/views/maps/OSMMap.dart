@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:my_app/views/maps/mapspage.dart';
+import 'package:cis099_2/views/maps/mapspage.dart';
 
 class OsmmapScreen extends StatefulWidget {
   const OsmmapScreen({super.key});

@@ -1,11 +1,11 @@
-import 'package:my_app/views/chatapp/chats.dart';
-import 'package:my_app/views/chatapp/conversations.dart';
-import 'package:my_app/views/esewa/esewapage.dart';
-import 'package:my_app/views/login.dart';
-import 'package:my_app/views/maps/mapspage.dart';
-import 'package:my_app/views/news/dashboard.dart';
-import 'package:my_app/views/news/detailPage.dart';
-import 'package:my_app/views/webview.dart';
+import 'package:cis099_2/views/chatapp/chats.dart';
+import 'package:cis099_2/views/chatapp/conversations.dart';
+import 'package:cis099_2/views/esewa/esewapage.dart';
+import 'package:cis099_2/views/login.dart';
+import 'package:cis099_2/views/maps/mapspage.dart';
+import 'package:cis099_2/views/news/dashboard.dart';
+import 'package:cis099_2/views/news/detailPage.dart';
+import 'package:cis099_2/views/webview.dart';
 
 class AppRoute {
   AppRoute._();

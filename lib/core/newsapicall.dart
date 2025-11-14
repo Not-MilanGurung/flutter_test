@@ -1,8 +1,9 @@
 import 'dart:convert' as convert;
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:my_app/model/newsapi.dart';
+import 'package:cis099_2/model/newsapi.dart';
 import './static.dart';
 
 class NewsApiCall {
@@ -30,7 +31,9 @@ class NewsApiCall {
       }
       return null;
     } catch (e) {
-      print('Error msg: ${e.toString()}');
+      if (kDebugMode){
+        print('Error msg: ${e.toString()}');
+      }
       return null;
     }
   }

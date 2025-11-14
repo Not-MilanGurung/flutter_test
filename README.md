@@ -1,6 +1,6 @@
-# my_app
+# cis099_2
 
-A new Flutter project.
+Flutter application following lectures
 
 ## Getting Started
 

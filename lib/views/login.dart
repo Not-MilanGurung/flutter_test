@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/routes.dart';
+import 'package:cis099_2/routes.dart';
 import 'dart:core';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Login extends StatefulWidget {
@@ -16,9 +18,11 @@ class LoginState extends State<Login> {
   static const titleSize = 80.0;
   static const heading2 = 56.0;
   static const textSize = 16.0;
+  static const phoneNumberRegEx = "";
   static bool? rememberMe = false;
   late TextEditingController phoneNumberTextEditingController;
   late TextEditingController passwordTextEditingController;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -27,6 +31,33 @@ class LoginState extends State<Login> {
     passwordTextEditingController = TextEditingController();
   }
 
+  Future<void> readFromStorage() async {
+    setState(() {
+      isLoading = true;
+    });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var phoneNumber = prefs.getString("phoneNumber");
+    var password = prefs.getString("password");
+    if (phoneNumber != null && password != null){
+      phoneNumberTextEditingController.text = phoneNumber;
+      passwordTextEditingController.text = password;
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> storeInStorage() async {
+    setState(() {
+      isLoading = true;
+    });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("phoneNumber", phoneNumberTextEditingController.text);
+    prefs.setString("password", passwordTextEditingController.text);
+    setState(() {
+      isLoading = false;
+    });
+  }
   dynamic createLogo() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -162,8 +193,11 @@ class LoginState extends State<Login> {
               ],
             ),
             Center(
-              child: TextButton(
+              child: isLoading? CircularProgressIndicator() : TextButton(
                 onPressed: () {
+                  if (passwordTextEditingController.text != ""){
+                    storeInStorage();
+                  }
                   Navigator.pushNamed(context, AppRoute.dashboard);
                 },
                 style: TextButton.styleFrom(

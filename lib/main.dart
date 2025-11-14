@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/firebase_options.dart';
-import 'package:my_app/routes.dart';
+import 'package:cis099_2/firebase_options.dart';
+import 'package:cis099_2/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

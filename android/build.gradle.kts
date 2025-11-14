@@ -1,25 +1,8 @@
-plugins {
-    // (you can list any top‑level plugins you need here)
-}
-
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.2.0")
-        // No classpath for the Secrets plugin – we’ll apply it via plugins {}
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
-
 }
 
 val newBuildDir: Directory =

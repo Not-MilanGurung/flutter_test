@@ -1,4 +1,4 @@
-import 'package:my_app/model/newsapi.dart';
+import 'package:cis099_2/model/newsapi.dart';
 
 class StaticValue {
   static final String apiKey = "01e1fd60224d49e2978d26aa4c80770f";
