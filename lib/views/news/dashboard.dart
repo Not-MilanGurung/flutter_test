@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/core/newsapicall.dart';
 import 'package:my_app/core/static.dart';
 import 'package:my_app/model/newsapi.dart';
-import 'package:my_app/views/news/detailPage.dart';
+import 'package:my_app/routes.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -29,9 +29,7 @@ class _DashboardState extends State<Dashboard> {
     return GestureDetector(
       onTap: () {
         StaticValue.clickedArticle = article;
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (context) => const DetailPage()),
-        );
+        Navigator.of(context).pushNamed(AppRoute.detailPage);
       },
       child: Stack(
         children: [
@@ -139,12 +137,16 @@ class _DashboardState extends State<Dashboard> {
     return Container(
       padding: EdgeInsetsGeometry.only(top: 12, bottom: 12),
       height: size.height / 1.5,
-      child: GridView.builder(scrollDirection: Axis.vertical,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
         padding: EdgeInsets.zero,
-      itemBuilder: (BuildContext context, int index){
-        return verticalCard(size, 'More', newsApi.articles![index]);
-      },)
+        itemBuilder: (BuildContext context, int index) {
+          return verticalCard(size, 'More', newsApi.articles![index]);
+        },
+      ),
       // child: ListView.builder(
       //   shrinkWrap: true,
       //   itemCount: newsApi.articles!.length,
@@ -167,11 +169,7 @@ class _DashboardState extends State<Dashboard> {
           GestureDetector(
             onTap: () {
               StaticValue.clickedArticle = article;
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) => const DetailPage(),
-                ),
-              );
+              Navigator.of(context).pushNamed(AppRoute.detailPage);
             },
             child: Stack(
               alignment: Alignment.center,

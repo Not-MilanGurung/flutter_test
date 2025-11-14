@@ -21,7 +21,8 @@ class _ChatsState extends State<Chats> {
     final messageref = FirebaseFirestore.instance
         .collection(firebaseCollection)
         .doc(chadId)
-        .collection(messagesCollection).doc();
+        .collection(messagesCollection)
+        .doc();
 
     await messageref.set({
       'senderId': currentUserId,
@@ -30,66 +31,66 @@ class _ChatsState extends State<Chats> {
     });
 
     await FirebaseFirestore.instance
-        .collection(firebaseCollection).doc(chadId)
+        .collection(firebaseCollection)
+        .doc(chadId)
         .update({
           'lastMessage': text.trim(),
           'lastUpdated': FieldValue.serverTimestamp(),
-        }
-    );
+        });
   }
 
-  Stream<QuerySnapshot> getMessage(){
+  Stream<QuerySnapshot> getMessage() {
     return FirebaseFirestore.instance
-        .collection(firebaseCollection).doc(chadId)
+        .collection(firebaseCollection)
+        .doc(chadId)
         .collection(messagesCollection)
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _textEditingController = TextEditingController();
     messageStream = getMessage();
   }
 
-  leftSideChat(Size size, String message){
+  leftSideChat(Size size, String message) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          width: size.width/1.5,
+          width: size.width / 1.5,
           margin: EdgeInsets.only(left: 15, bottom: 15),
           padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
           decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(15)
+            color: Colors.grey,
+            borderRadius: BorderRadius.circular(15),
           ),
-          child: Text(message,
-            style: TextStyle(color: Colors.white),),
-        )
+          child: Text(message, style: TextStyle(color: Colors.white)),
+        ),
       ],
     );
   }
 
-  rightSideChat(Size size, String message){
+  rightSideChat(Size size, String message) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            width: size.width/1.5,
-            margin: EdgeInsets.only(left: 15, bottom: 15),
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-            decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(15)
-            ),
-            child: Text(message,
-              style: TextStyle(color: Colors.white),),
-          )
-        ],
-      );
-
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: size.width / 1.5,
+          margin: EdgeInsets.only(left: 15, bottom: 15),
+          padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Text(message, style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -102,37 +103,42 @@ class _ChatsState extends State<Chats> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60,),
+              SizedBox(height: 60),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
-                child: Padding(padding: const EdgeInsets.all(20.0),
-                  child: Icon(Icons.arrow_back, size: 35, color: Colors.black,),),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Icon(Icons.arrow_back, size: 35, color: Colors.black),
+                ),
               ),
-              StreamBuilder<QuerySnapshot>(stream: messageStream,
-                  builder: (context, snapshot){
-                    if(snapshot.connectionState == ConnectionState.waiting){
-                      return const CircularProgressIndicator();
-                    }
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty){
-                      return const Text('No data available');
-                    }
-                    final messages = snapshot.data!.docs;
-                    return Container(
-                      width: size.width,
-                      height: size.height/3,
-                      child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 5),
-                          itemCount: messages.length,
-                          itemBuilder: (context, index){
-                            var msg = messages[index];
-                            final isMe = msg['senderId'] == currentUserId;
-                            return isMe? rightSideChat(size, msg['text']) : leftSideChat(size, msg['text']);
-                          }
-                      ),
-                    );
+              StreamBuilder<QuerySnapshot>(
+                stream: messageStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
                   }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Text('No data available');
+                  }
+                  final messages = snapshot.data!.docs;
+                  return Container(
+                    width: size.width,
+                    height: size.height / 3,
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(bottom: 5),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        var msg = messages[index];
+                        final isMe = msg['senderId'] == currentUserId;
+                        return isMe
+                            ? rightSideChat(size, msg['text'])
+                            : leftSideChat(size, msg['text']);
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -143,21 +149,17 @@ class _ChatsState extends State<Chats> {
                 child: Row(
                   children: [
                     Container(
-                      width: size.width/1.2,
+                      width: size.width / 1.2,
                       child: TextField(
                         controller: _textEditingController,
                         style: TextStyle(),
-                        onSubmitted: (var abc){
-
-                        },
-                        onEditingComplete: (){
-
-                        },
+                        onSubmitted: (var abc) {},
+                        onEditingComplete: () {},
                       ),
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(width: 10),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         var abc = _textEditingController.text;
                         sendMessage(abc);
                         setState(() {
@@ -166,13 +168,14 @@ class _ChatsState extends State<Chats> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Icon(Icons.send, color: Colors.white, size: 25,),),
-                    )
-                  ],),
-              )
+                        child: Icon(Icons.send, color: Colors.white, size: 25),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
-          )
-          
+          ),
         ],
       ),
     );

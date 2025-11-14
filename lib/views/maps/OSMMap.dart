@@ -14,14 +14,19 @@ class _OsmmapScreenState extends State<OsmmapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('OpenStreetMap'), actions: [GestureDetector(onTap: (){
-        Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (context) => MapsPage(),
-            ),
-        );
-      },
-      child: const Icon(Icons.arrow_forward),)],),
+      appBar: AppBar(
+        title: const Text('OpenStreetMap'),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute<void>(builder: (context) => MapsPage()));
+            },
+            child: const Icon(Icons.arrow_forward),
+          ),
+        ],
+      ),
       body: FlutterMap(
         options: MapOptions(
           initialCenter: LatLng(37.7749, -122.42),
@@ -32,9 +37,8 @@ class _OsmmapScreenState extends State<OsmmapScreen> {
             urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'np.patancollege.my_ap',
           ),
-
         ],
-      )
+      ),
     );
   }
 }

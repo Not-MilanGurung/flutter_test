@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/core/newsapicall.dart';
 import 'package:my_app/core/static.dart';
 import 'package:my_app/model/newsapi.dart';
+import 'package:my_app/routes.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key});
@@ -16,15 +17,16 @@ class _DetailPageState extends State<DetailPage> {
   getVerticalCards(NewsApi newsApi, size) {
     return Column(
       // padding: EdgeInsetsGeometry.only(top: 12, bottom: 12),
-
-      children: [ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: newsApi.articles!.length,
-        itemBuilder: (BuildContext context, int index) {
-          return verticalCard(size, 'More', newsApi.articles![index]);
-        },
-      ),]
+      children: [
+        ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: newsApi.articles!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return verticalCard(size, 'More', newsApi.articles![index]);
+          },
+        ),
+      ],
     );
   }
 
@@ -32,11 +34,9 @@ class _DetailPageState extends State<DetailPage> {
     String heading = article.title!;
     String date = article.publishedAt!;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         StaticValue.clickedArticle = article;
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (context) => const DetailPage()),
-        );
+        Navigator.of(context).pushNamed(AppRoute.detailPage);
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -53,7 +53,8 @@ class _DetailPageState extends State<DetailPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
-                      article.urlToImage ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png",
+                      article.urlToImage ??
+                          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png",
                     ),
                   ),
                 ),
@@ -131,7 +132,8 @@ class _DetailPageState extends State<DetailPage> {
               height: size.height / 3.5,
               width: size.width,
               child: Image.network(
-                article.urlToImage ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png",
+                article.urlToImage ??
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png",
                 fit: BoxFit.cover,
               ),
             ),
@@ -162,8 +164,7 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               margin: EdgeInsets.all(15),
               child: Text(
-                article.title!
-                    .toUpperCase(),
+                article.title!.toUpperCase(),
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -175,7 +176,10 @@ class _DetailPageState extends State<DetailPage> {
               margin: EdgeInsets.all(15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text(article.author?? "Null"), Text(article.publishedAt ?? "Null")],
+                children: [
+                  Text(article.author ?? "Null"),
+                  Text(article.publishedAt ?? "Null"),
+                ],
               ),
             ),
             Container(
@@ -207,10 +211,11 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _futureNewsApi = NewsApiCall().getnewsdata('Nepal');
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -223,15 +228,15 @@ class _DetailPageState extends State<DetailPage> {
               SizedBox(height: 45),
               headingElement(size),
               FutureBuilder<NewsApi?>(
-                  future: _futureNewsApi,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return getVerticalCards(snapshot.data!, size);
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
+                future: _futureNewsApi,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return getVerticalCards(snapshot.data!, size);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
             ],
           ),

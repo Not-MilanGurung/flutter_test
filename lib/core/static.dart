@@ -5,7 +5,8 @@ class StaticValue {
   static final String baseURL = "newsapi.org";
   static final String path = "/v2/everything";
   static Articles? clickedArticle;
-  static final String noImageFoundURL = "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg";
+  static final String noImageFoundURL =
+      "https://thumbs.dreamstime.com/b/no-image-available-icon-isolated-dark-background-simple-vector-logo-no-image-available-icon-isolated-dark-background-275079095.jpg";
   static final String mapKey = "AIzaSyB6dg9Y5It-HF0K1fzuROsznUtbwUyZekw";
   var rawData = '''
   {

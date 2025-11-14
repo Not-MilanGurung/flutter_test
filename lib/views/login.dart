@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/routes.dart';
 import 'dart:core';
 
-import 'news/dashboard.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,7 +17,17 @@ class LoginState extends State<Login> {
   static const heading2 = 56.0;
   static const textSize = 16.0;
   static bool? rememberMe = false;
-  createLogo() {
+  late TextEditingController phoneNumberTextEditingController;
+  late TextEditingController passwordTextEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    phoneNumberTextEditingController = TextEditingController();
+    passwordTextEditingController = TextEditingController();
+  }
+
+  dynamic createLogo() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,24 +45,44 @@ class LoginState extends State<Login> {
     );
   }
 
-  createTextBox(width, height, String text, double textSize) {
+  dynamic createTextBox(
+    double width,
+    double height,
+    double textSize,
+    TextEditingController textController,
+    TextInputType keyBoardType,
+    String hintText,
+    {
+    bool obscureText = false,
+  }) {
     return Container(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentGeometry.topRight,
       width: width,
       height: height,
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(0.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(50),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-        child: Text(text, style: TextStyle(fontSize: textSize)),
+        padding: const EdgeInsets.only(left: 20.0, bottom: 6.0, top: 6.0),
+        child: TextField(
+          controller: textController,
+          keyboardType: keyBoardType,
+          textAlign: TextAlign.justify,
+          textAlignVertical: TextAlignVertical.top,
+          style: TextStyle(fontSize: textSize),
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            hintText: hintText,
+            border: InputBorder.none
+          ),
+        ),
       ),
     );
   }
 
-  createContainer(size) {
+  dynamic createContainer(Size size) {
     var containerWidth = size.width / 1.2;
 
     return Container(
@@ -81,13 +112,23 @@ class LoginState extends State<Login> {
               child: createTextBox(
                 containerWidth,
                 36.0,
-                "Email / Phone number",
                 textSize,
+                phoneNumberTextEditingController,
+                TextInputType.phone,
+                "Phone Number"
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: createTextBox(containerWidth, 36.0, "Password", textSize),
+              child: createTextBox(
+                containerWidth,
+                36.0,
+                textSize,
+                passwordTextEditingController,
+                TextInputType.text,
+                "Password",
+                obscureText: true,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -108,7 +149,9 @@ class LoginState extends State<Login> {
                   alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
-                      print("Forgot password");
+                      if (kDebugMode) {
+                        print("Forgot password");
+                      }
                     },
                     child: Text(
                       "Forgot Password?",
@@ -121,10 +164,7 @@ class LoginState extends State<Login> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(builder: (context) => Dashboard()),
-                  );
+                  Navigator.pushNamed(context, AppRoute.dashboard);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.red,
@@ -152,7 +192,9 @@ class LoginState extends State<Login> {
                   ),
                   TextButton(
                     onPressed: () {
-                      print("SignUP");
+                      if (kDebugMode) {
+                        print("SignUP");
+                      }
                     },
                     style: TextButton.styleFrom(
                       fixedSize: Size(0.0, 0.0),
@@ -177,6 +219,8 @@ class LoginState extends State<Login> {
       ),
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {

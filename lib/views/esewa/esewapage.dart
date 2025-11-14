@@ -12,11 +12,9 @@ class _EsewapageState extends State<Esewapage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-
-      Column(
+      body: Column(
         children: [
-          SizedBox(height: 50,),
+          SizedBox(height: 50),
           Container(
             child: EsewaPayButton(
               paymentConfig: ESewaConfig.dev(
@@ -35,7 +33,6 @@ class _EsewapageState extends State<Esewapage> {
               },
             ),
           ),
-
         ],
       ),
     );
